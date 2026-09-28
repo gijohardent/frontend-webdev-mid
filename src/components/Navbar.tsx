@@ -13,7 +13,7 @@ const items: { key: Page; label: string }[] = [
 export default function Navbar({ page, onChange }: Props) {
   return (
     <header className="navbar">
-      <h1 className="brand">Buku Induk</h1>
+      <h1 className="brand">Sistem Informasi Mahasiswa</h1>
       <nav>
         {items.map((item) => (
           <button
