@@ -10,7 +10,7 @@ const menus = [
 
 const Navbar = ({ page, onChangePage }: NavbarProps) => (
   <header className="navbar">
-    <h1 className="brand">Buku Induk</h1>
+    <h1 className="brand">Student Management System</h1>
     <nav>
       {menus.map((menu) => (
         <button
