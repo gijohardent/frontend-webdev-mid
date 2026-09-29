@@ -1,30 +1,28 @@
-export type Page = 'ringkasan' | 'mahasiswa'
-
-interface Props {
-  page: Page
-  onChange: (page: Page) => void
+interface NavbarProps {
+  page: string
+  onChangePage: (page: string) => void
 }
 
-const items: { key: Page; label: string }[] = [
+const menus = [
   { key: 'ringkasan', label: 'Ringkasan' },
   { key: 'mahasiswa', label: 'Data Mahasiswa' },
 ]
 
-export default function Navbar({ page, onChange }: Props) {
-  return (
-    <header className="navbar">
-      <h1 className="brand">Student Management System</h1>
-      <nav>
-        {items.map((item) => (
-          <button
-            key={item.key}
-            className={page === item.key ? 'tab active' : 'tab'}
-            onClick={() => onChange(item.key)}
-          >
-            {item.label}
-          </button>
-        ))}
-      </nav>
-    </header>
-  )
-}
+const Navbar = ({ page, onChangePage }: NavbarProps) => (
+  <header className="navbar">
+    <h1 className="brand">Buku Induk</h1>
+    <nav>
+      {menus.map((menu) => (
+        <button
+          key={menu.key}
+          className={page === menu.key ? 'tab active' : 'tab'}
+          onClick={() => onChangePage(menu.key)}
+        >
+          {menu.label}
+        </button>
+      ))}
+    </nav>
+  </header>
+)
+
+export default Navbar

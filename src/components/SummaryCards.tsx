@@ -1,10 +1,19 @@
 import type { Student } from '../types'
-import { STATUS_LIST } from '../types'
+import { statusList } from '../data'
 
-export default function SummaryCards({ students }: { students: Student[] }) {
+interface SummaryCardsProps {
+  students: Student[]
+}
+
+const SummaryCards = ({ students }: SummaryCardsProps) => {
   const total = students.length
-  const avg = total ? students.reduce((sum, s) => sum + s.ipk, 0) / total : 0
-  const top = students.reduce<Student | null>((best, s) => (!best || s.ipk > best.ipk ? s : best), null)
+
+  // reduce: menjumlahkan semua IPK menjadi satu angka
+  const rataRata = total > 0 ? students.reduce((sum, s) => sum + s.ipk, 0) / total : 0
+
+  // Cari IPK tertinggi, lalu cari mahasiswa pemilik IPK itu
+  const ipkTertinggi = Math.max(...students.map((s) => s.ipk))
+  const terbaik = students.find((s) => s.ipk === ipkTertinggi)
 
   return (
     <section className="summary">
@@ -12,23 +21,34 @@ export default function SummaryCards({ students }: { students: Student[] }) {
         <span className="stat-value">{total}</span>
         <span className="stat-label">Total mahasiswa terdaftar</span>
       </div>
+
       <div className="stat">
-        <span className="stat-value">{avg.toFixed(2)}</span>
+        <span className="stat-value">{rataRata.toFixed(2)}</span>
         <span className="stat-label">Rata-rata IPK</span>
       </div>
+
       <div className="stat">
-        <span className="stat-value small">{top ? top.nama : '-'}</span>
-        <span className="stat-label">IPK tertinggi{top ? ` (${top.ipk.toFixed(2)})` : ''}</span>
+        {terbaik ? (
+          <>
+            <span className="stat-value small">{terbaik.nama}</span>
+            <span className="stat-label">IPK tertinggi ({terbaik.ipk})</span>
+          </>
+        ) : (
+          <span className="stat-label">Belum ada data</span>
+        )}
       </div>
-      <div className="stat status-breakdown">
-        {STATUS_LIST.map((st) => {
-          const count = students.filter((s) => s.status === st).length
-          const pct = total ? (count / total) * 100 : 0
+
+      <div className="stat">
+        {statusList.map((status) => {
+          const jumlah = students.filter((s) => s.status === status).length
+          const persen = total > 0 ? (jumlah / total) * 100 : 0
           return (
-            <div key={st} className="bar-row">
-              <span>{st}</span>
-              <div className="bar"><div className={`bar-fill ${st}`} style={{ width: `${pct}%` }} /></div>
-              <span>{count}</span>
+            <div key={status} className="bar-row">
+              <span>{status}</span>
+              <div className="bar">
+                <div className={`bar-fill ${status}`} style={{ width: `${persen}%` }} />
+              </div>
+              <span>{jumlah}</span>
             </div>
           )
         })}
@@ -36,3 +56,5 @@ export default function SummaryCards({ students }: { students: Student[] }) {
     </section>
   )
 }
+
+export default SummaryCards
